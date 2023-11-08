@@ -154,7 +154,7 @@ def download_image(image):
 def encrypt(download_button):
     start = time.time()
     MSG = text_entry.get("1.0", "end-1c")
-    image = "0.png"
+    image = r".\0.png"
     try:
         EncryptImage(image, MSG)
     except Exception as e:
@@ -166,7 +166,7 @@ def encrypt(download_button):
 
 def decrypt():
     start = time.time()
-    image = "test.png"
+    image = r".\test.png"
     if not os.path.isfile(image):
         messagebox.showerror("Error", "No se encontró ninguna imagen para desencriptar, por favor suba una imagen")
         return
@@ -183,10 +183,10 @@ def decrypt():
     result_text.config(state=tk.DISABLED)
 
 def cleanup():
-    if os.path.isfile("0.png"):
-        os.remove("0.png")
-    if os.path.isfile("test.png"):
-        os.remove("test.png")
+    if os.path.isfile(r".\0.png"):
+        os.remove(r".\0.png")
+    if os.path.isfile(r".\test.png"):
+        os.remove(r".\test.png")
     root.destroy()
 
 root = tk.Tk()
@@ -212,10 +212,10 @@ text_entry.config(yscrollcommand=scrollbar_encrypt.set)
 encrypt_image_label = tk.Label(encrypt_tab)
 encrypt_image_label.pack(fill=tk.BOTH, expand=True)
 
-upload_button_encrypt = tk.Button(encrypt_tab, text="Subir imagen", command=lambda: upload_image(encrypt_image_label, "0.png"))
+upload_button_encrypt = tk.Button(encrypt_tab, text="Subir imagen", command=lambda: upload_image(encrypt_image_label, r".\0.png"))
 upload_button_encrypt.pack(fill=tk.BOTH, expand=True)
 
-download_button_encrypt = tk.Button(encrypt_tab, text="Descargar imagen", command=lambda: download_image("test.png"))
+download_button_encrypt = tk.Button(encrypt_tab, text="Descargar imagen", command=lambda: download_image(r".\test.png"))
 download_button_encrypt.pack_forget()
 
 encrypt_button = tk.Button(encrypt_tab, text="Encriptar", command=lambda: encrypt(download_button_encrypt))
@@ -224,7 +224,7 @@ encrypt_button.pack(fill=tk.BOTH, expand=True)
 decrypt_image_label = tk.Label(decrypt_tab)
 decrypt_image_label.pack(fill=tk.BOTH, expand=True)
 
-upload_button_decrypt = tk.Button(decrypt_tab, text="Subir imagen", command=lambda: upload_image(decrypt_image_label, "test.png"))
+upload_button_decrypt = tk.Button(decrypt_tab, text="Subir imagen", command=lambda: upload_image(decrypt_image_label, r".\test.png"))
 upload_button_decrypt.pack(fill=tk.BOTH, expand=True)
 
 decrypt_button = tk.Button(decrypt_tab, text="Desencriptar", command=decrypt)
