@@ -101,8 +101,11 @@ def DecryptImage(imageToEncrypt,Step,startx,starty):
     #and convert each chunk to ASCII
     plainText = ""
     for index in range(0,len(binaryText),8):
-        a = int(binaryText[index:index+8],2)
-        plainText += chr(a)
+        try:
+            a = int(binaryText[index:index+8],2)
+            plainText += chr(a)
+        except ValueError:
+            print(f"Error: invalid binary number {binaryText[index:index+8]}")
 
 
 
@@ -155,8 +158,11 @@ def encrypt(download_button):
     start = time.time()
     MSG = text_entry.get("1.0", "end-1c")
     image = r".\0.png"
+    step = int(step_entry_encrypt.get())
+    x_start = int(x_start_entry_encrypt.get())
+    y_start = int(y_start_entry_encrypt.get())
     try:
-        EncryptImage(image, MSG)
+        EncryptImage(image, MSG, step, x_start, y_start)
     except Exception as e:
         messagebox.showerror("Error", "No se encontró ninguna imagen para encriptar, por favor suba una imagen")
         return
@@ -167,11 +173,15 @@ def encrypt(download_button):
 def decrypt():
     start = time.time()
     image = r".\test.png"
+    step = int(step_entry_decrypt.get())
+    x_start = int(x_start_entry_decrypt.get())
+    y_start = int(y_start_entry_decrypt.get())
     if not os.path.isfile(image):
         messagebox.showerror("Error", "No se encontró ninguna imagen para desencriptar, por favor suba una imagen")
         return
     try:
-        result = DecryptImage(image, 2, 0, 0)
+        print(step, x_start, y_start, type(step), type(x_start), type(y_start))
+        result = DecryptImage(image, step, x_start, y_start)
     except Exception as e:
         messagebox.showerror("Error", str(e))
         return
@@ -215,6 +225,22 @@ encrypt_image_label.pack(fill=tk.BOTH, expand=True)
 upload_button_encrypt = tk.Button(encrypt_tab, text="Subir imagen", command=lambda: upload_image(encrypt_image_label, r".\0.png"))
 upload_button_encrypt.pack(fill=tk.BOTH, expand=True)
 
+# En el tab de encriptar, después del botón de subir imagen
+tk.Label(encrypt_tab, text="Paso").pack(fill=tk.BOTH, expand=True)
+step_entry_encrypt = tk.Entry(encrypt_tab, justify='center')
+step_entry_encrypt.insert(0, "2")
+step_entry_encrypt.pack(fill=tk.BOTH, expand=True)
+
+tk.Label(encrypt_tab, text="Inicio de coordenada X").pack(fill=tk.BOTH, expand=True)
+x_start_entry_encrypt = tk.Entry(encrypt_tab, justify='center')
+x_start_entry_encrypt.insert(0, "0")
+x_start_entry_encrypt.pack(fill=tk.BOTH, expand=True)
+
+tk.Label(encrypt_tab, text="Inicio de coordenada Y").pack(fill=tk.BOTH, expand=True)
+y_start_entry_encrypt = tk.Entry(encrypt_tab, justify='center')
+y_start_entry_encrypt.insert(0, "0")
+y_start_entry_encrypt.pack(fill=tk.BOTH, expand=True)
+
 download_button_encrypt = tk.Button(encrypt_tab, text="Descargar imagen", command=lambda: download_image(r".\test.png"))
 download_button_encrypt.pack_forget()
 
@@ -226,6 +252,22 @@ decrypt_image_label.pack(fill=tk.BOTH, expand=True)
 
 upload_button_decrypt = tk.Button(decrypt_tab, text="Subir imagen", command=lambda: upload_image(decrypt_image_label, r".\test.png"))
 upload_button_decrypt.pack(fill=tk.BOTH, expand=True)
+
+# En el tab de desencriptar, después del botón de subir imagen
+tk.Label(decrypt_tab, text="Paso").pack(fill=tk.BOTH, expand=True)
+step_entry_decrypt = tk.Entry(decrypt_tab, justify='center')
+step_entry_decrypt.insert(0, "2")
+step_entry_decrypt.pack(fill=tk.BOTH, expand=True)
+
+tk.Label(decrypt_tab, text="Inicio de coordenada X").pack(fill=tk.BOTH, expand=True)
+x_start_entry_decrypt = tk.Entry(decrypt_tab, justify='center')
+x_start_entry_decrypt.insert(0, "0")
+x_start_entry_decrypt.pack(fill=tk.BOTH, expand=True)
+
+tk.Label(decrypt_tab, text="Inicio de coordenada Y").pack(fill=tk.BOTH, expand=True)
+y_start_entry_decrypt = tk.Entry(decrypt_tab, justify='center')
+y_start_entry_decrypt.insert(0, "0")
+y_start_entry_decrypt.pack(fill=tk.BOTH, expand=True)
 
 decrypt_button = tk.Button(decrypt_tab, text="Desencriptar", command=decrypt)
 decrypt_button.pack(fill=tk.BOTH, expand=True)
